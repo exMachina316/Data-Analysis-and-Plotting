@@ -30,7 +30,7 @@ const sampleDatasets = {
 };
 
 // DOM Content Loaded Event
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeApp();
 });
 
@@ -39,25 +39,25 @@ function initializeApp() {
     const dataForm = document.getElementById('dataForm');
     const fileInput = document.getElementById('fileInput');
     const dataSource = document.getElementById('dataSource');
-    
+
     if (dataForm) {
         dataForm.addEventListener('submit', handleDataSubmission);
     }
-    
+
     if (fileInput) {
         fileInput.addEventListener('change', handleFileUpload);
     }
-    
+
     if (dataSource) {
         dataSource.addEventListener('change', handleDataSourceChange);
     }
-    
+
     // Initialize chart controls
     const generateChartBtn = document.getElementById('generateChart');
     if (generateChartBtn) {
         generateChartBtn.addEventListener('click', generateVisualization);
     }
-    
+
     // Load data from localStorage if available
     loadStoredData();
 }
@@ -66,8 +66,8 @@ function initializeApp() {
 function handleDataSourceChange(event) {
     const dataInput = document.getElementById('dataInput');
     const fileInput = document.getElementById('fileInput');
-    
-    switch(event.target.value) {
+
+    switch (event.target.value) {
         case 'csv':
             dataInput.placeholder = 'Paste CSV data here...\nExample:\nName,Age,City\nJohn,25,New York\nJane,30,Los Angeles';
             fileInput.style.display = 'block';
@@ -91,15 +91,15 @@ function handleDataSourceChange(event) {
 // Handle data form submission
 async function handleDataSubmission(event) {
     event.preventDefault();
-    
+
     const formData = new FormData(event.target);
     const dataSource = formData.get('dataSource');
     const dataInput = formData.get('dataInput');
-    
+
     try {
         showLoading('Loading dataset...');
-        
-        switch(dataSource) {
+
+        switch (dataSource) {
             case 'csv':
                 if (dataInput.trim()) {
                     currentData = parseCSV(dataInput);
@@ -130,18 +130,18 @@ async function handleDataSubmission(event) {
             default:
                 throw new Error('Please select a data source type');
         }
-        
+
         if (currentData.length === 0) {
             throw new Error('No data found or invalid format');
         }
-        
+
         // Store data for use across pages
         localStorage.setItem('currentData', JSON.stringify(currentData));
-        
+
         displayDataPreview(currentData);
         populateAxisSelectors(currentData);
         showSuccess('Dataset loaded successfully!');
-        
+
     } catch (error) {
         showError('Error loading dataset: ' + error.message);
     }
@@ -151,11 +151,11 @@ async function handleDataSubmission(event) {
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         const content = e.target.result;
-        
+
         try {
             if (file.name.endsWith('.csv')) {
                 currentData = parseCSV(content);
@@ -164,17 +164,17 @@ function handleFileUpload(event) {
             } else {
                 throw new Error('Unsupported file format');
             }
-            
+
             localStorage.setItem('currentData', JSON.stringify(currentData));
             displayDataPreview(currentData);
             populateAxisSelectors(currentData);
             showSuccess('File uploaded successfully!');
-            
+
         } catch (error) {
             showError('Error reading file: ' + error.message);
         }
     };
-    
+
     reader.readAsText(file);
 }
 
@@ -184,10 +184,10 @@ function parseCSV(csvText) {
     if (lines.length < 2) {
         throw new Error('CSV must have at least a header and one data row');
     }
-    
+
     const headers = lines[0].split(',').map(h => h.trim());
     const data = [];
-    
+
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map(v => v.trim());
         if (values.length === headers.length) {
@@ -200,7 +200,7 @@ function parseCSV(csvText) {
             data.push(row);
         }
     }
-    
+
     return data;
 }
 
@@ -222,15 +222,15 @@ async function fetchJSONData(url) {
 function displayDataPreview(data) {
     const previewContainer = document.getElementById('dataPreview');
     if (!previewContainer) return;
-    
+
     if (data.length === 0) {
         previewContainer.innerHTML = '<p>No data to display.</p>';
         return;
     }
-    
+
     const headers = Object.keys(data[0]);
     const maxRows = Math.min(data.length, 10); // Show first 10 rows
-    
+
     let tableHTML = `
         <section class="table-wrapper">
             <table class="data-table">
@@ -241,30 +241,30 @@ function displayDataPreview(data) {
                 </thead>
                 <tbody>
     `;
-    
+
     for (let i = 0; i < maxRows; i++) {
         tableHTML += '<tr>';
         headers.forEach(header => {
             const cellValue = data[i][header] || '';
-            const displayValue = typeof cellValue === 'string' && cellValue.length > 30 
-                ? cellValue.substring(0, 30) + '...' 
+            const displayValue = typeof cellValue === 'string' && cellValue.length > 30
+                ? cellValue.substring(0, 30) + '...'
                 : cellValue;
             tableHTML += `<td title="${cellValue}">${displayValue}</td>`;
         });
         tableHTML += '</tr>';
     }
-    
+
     tableHTML += '</tbody></table></section>';
-    
+
     if (data.length > 10) {
         tableHTML += `<p style="margin-top: 1rem; font-style: italic; text-align: center;">Showing first 10 rows of ${data.length} total rows.</p>`;
     }
-    
+
     // Add scroll hint for wide tables
     if (headers.length > 5) {
         tableHTML += `<p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666; text-align: center; font-style: italic;">💡 Scroll horizontally to view all ${headers.length} columns</p>`;
     }
-    
+
     previewContainer.innerHTML = tableHTML;
 }
 
@@ -272,15 +272,15 @@ function displayDataPreview(data) {
 function populateAxisSelectors(data) {
     const xAxisSelect = document.getElementById('xAxis');
     const yAxisSelect = document.getElementById('yAxis');
-    
+
     if (!xAxisSelect || !yAxisSelect || data.length === 0) return;
-    
+
     const headers = Object.keys(data[0]);
-    
+
     // Clear existing options except the first placeholder
     xAxisSelect.innerHTML = '<option value="">Select X-Axis</option>';
     yAxisSelect.innerHTML = '<option value="">Select Y-Axis</option>';
-    
+
     headers.forEach(header => {
         xAxisSelect.innerHTML += `<option value="${header}">${header}</option>`;
         yAxisSelect.innerHTML += `<option value="${header}">${header}</option>`;
@@ -292,17 +292,17 @@ function generateVisualization() {
     const chartType = document.getElementById('chartType').value;
     const xAxis = document.getElementById('xAxis').value;
     const yAxis = document.getElementById('yAxis').value;
-    
+
     if (!xAxis || !yAxis) {
         showError('Please select both X and Y axis values');
         return;
     }
-    
+
     if (currentData.length === 0) {
         showError('Please load a dataset first');
         return;
     }
-    
+
     try {
         createChart(chartType, xAxis, yAxis, currentData);
         showSuccess('Chart generated successfully!');
@@ -315,28 +315,28 @@ function generateVisualization() {
 function createChart(type, xAxis, yAxis, data) {
     const canvas = document.getElementById('dataChart');
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
-    
+
     // Destroy existing chart
     if (chart) {
         chart.destroy();
     }
-    
+
     // Prepare data for Chart.js
     const labels = data.map(item => item[xAxis]);
     const values = data.map(item => {
         const value = item[yAxis];
         return typeof value === 'number' ? value : 0;
     });
-    
+
     const chartConfig = {
         type: type === 'scatter' ? 'scatter' : type,
         data: {
             labels: type === 'scatter' ? undefined : labels,
             datasets: [{
                 label: `${yAxis} vs ${xAxis}`,
-                data: type === 'scatter' ? 
+                data: type === 'scatter' ?
                     data.map(item => ({
                         x: typeof item[xAxis] === 'number' ? item[xAxis] : 0,
                         y: typeof item[yAxis] === 'number' ? item[yAxis] : 0
@@ -379,7 +379,7 @@ function createChart(type, xAxis, yAxis, data) {
             }
         }
     };
-    
+
     chart = new Chart(ctx, chartConfig);
 }
 
@@ -390,7 +390,7 @@ function generateColors(count) {
         '#4facfe', '#00f2fe', '#43e97b', '#38f9d7',
         '#ffecd2', '#fcb69f', '#a8edea', '#fed6e3'
     ];
-    
+
     const result = [];
     for (let i = 0; i < count; i++) {
         result.push(colors[i % colors.length]);
@@ -433,17 +433,17 @@ function showMessage(message, type) {
     if (existingMessage) {
         existingMessage.remove();
     }
-    
+
     // Create new message
     const messageElement = document.createElement('article');
     messageElement.className = `message ${type}`;
     messageElement.textContent = message;
-    
+
     // Insert at the top of main content
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
         mainContent.insertBefore(messageElement, mainContent.firstChild);
-        
+
         // Auto-remove after 5 seconds for success/error messages
         if (type !== 'loading') {
             setTimeout(() => {
@@ -456,7 +456,7 @@ function showMessage(message, type) {
 }
 
 // Export data for use in statistics page
-window.getCurrentData = function() {
+window.getCurrentData = function () {
     return currentData;
 };
 
