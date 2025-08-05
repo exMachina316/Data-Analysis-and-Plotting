@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics - Dataset Analysis Dashboard</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <h1>Dataset Analysis Dashboard</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html" class="active">Statistics</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content statistics-page">
+        <section class="stats-controls">
+            <h2>Statistical Analysis Tools</h2>
+            <form id="statsForm" class="stats-form">
+                <fieldset>
+                    <legend>Analysis Configuration</legend>
+                    
+                    <label for="statsColumn">Select Column for Analysis:</label>
+                    <select id="statsColumn" name="statsColumn" required>
+                        <option value="">Choose a column</option>
+                    </select>
+
+                    <label for="analysisType">Analysis Type:</label>
+                    <select id="analysisType" name="analysisType" required>
+                        <option value="descriptive">Descriptive Statistics</option>
+                        <option value="correlation">Correlation Analysis</option>
+                        <option value="distribution">Distribution Analysis</option>
+                        <option value="outliers">Outlier Detection</option>
+                    </select>
+
+                    <button type="submit">Run Analysis</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <section class="stats-results">
+            <h2>Statistical Results</h2>
+            <article id="statsOutput" class="stats-container">
+                <p>Load a dataset from the Home page and select analysis options above.</p>
+            </article>
+        </section>
+
+        <section class="advanced-stats">
+            <h2>Advanced Statistical Tools</h2>
+            <article class="stats-grid">
+                <section class="stat-card">
+                    <h3>Summary Statistics</h3>
+                    <span id="summaryStats" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Data Distribution</h3>
+                    <span id="distributionStats" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Correlation Matrix</h3>
+                    <span id="correlationMatrix" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Outlier Analysis</h3>
+                    <span id="outlierAnalysis" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+            </article>
+        </section>
+
+        <section class="stats-visualization">
+            <h2>Statistical Charts</h2>
+            <article class="chart-container">
+                <canvas id="statsChart"></canvas>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dataset Analysis Dashboard. Built with HTML, CSS, and JavaScript.</p>
+    </footer>
+
+    <script src="src/statistics.js"></script>
+    <script src="src/script.js"></script>
+</body>
+</html>
