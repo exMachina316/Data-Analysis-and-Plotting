@@ -1,0 +1,7 @@
+{
+  "port": 3000,
+  "sessionExpiryHours": 24,
+  "saltRounds": 10,
+  "usersFile": "./src/users.json",
+  "publicDir": "../public"
+}

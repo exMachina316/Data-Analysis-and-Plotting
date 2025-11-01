@@ -46,6 +46,16 @@ function initializeApp() {
 
     if (fileInput) {
         fileInput.addEventListener('change', handleFileUpload);
+        
+        // Display selected file name
+        fileInput.addEventListener('change', function(e) {
+            const fileName = document.getElementById('fileName');
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = `Selected: ${this.files[0].name}`;
+            } else {
+                fileName.textContent = '';
+            }
+        });
     }
 
     if (dataSource) {
@@ -140,6 +150,15 @@ async function handleDataSubmission(event) {
 
         displayDataPreview(currentData);
         populateAxisSelectors(currentData);
+        
+        // Update statistics tab if functions are available
+        if (typeof populateStatsColumns === 'function') {
+            populateStatsColumns(currentData);
+        }
+        if (typeof generateAdvancedStats === 'function') {
+            generateAdvancedStats(currentData);
+        }
+        
         showSuccess('Dataset loaded successfully!');
 
     } catch (error) {
@@ -461,3 +480,36 @@ window.getCurrentData = function () {
 };
 
 window.loadStoredData = loadStoredData;
+
+// Tab Switching Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding content
+            this.classList.add('active');
+            const targetContent = document.getElementById(`${targetTab}-tab`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                
+                // If switching to statistics tab, refresh stats if data exists
+                if (targetTab === 'statistics' && currentData.length > 0) {
+                    if (typeof populateStatsColumns === 'function') {
+                        populateStatsColumns(currentData);
+                    }
+                    if (typeof generateAdvancedStats === 'function') {
+                        generateAdvancedStats(currentData);
+                    }
+                }
+            }
+        });
+    });
+});

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Dataset Analysis Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            padding: 2rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #5568d3;
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .auth-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            display: none;
+            padding: 0.5rem;
+            background: #fff5f5;
+            border-radius: 4px;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .success-message {
+            color: #38a169;
+            font-size: 0.9rem;
+            display: none;
+            padding: 0.5rem;
+            background: #f0fff4;
+            border-radius: 4px;
+            border-left: 4px solid #38a169;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <h1>Dataset Analysis Dashboard</h1>
+            <ul class="nav-links">
+                <li><a href="/html/index.html">Home</a></li>
+                <li><a href="/html/login.html">Login</a></li>
+                <li><a href="/html/signup.html" class="active">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="auth-container">
+            <h2>Create Your Account</h2>
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Username</label>
+                    <input type="text" id="name" name="name" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email (optional)">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Create a password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="submit-btn">Sign Up</button>
+            </form>
+            <div class="auth-links">
+                <p>Already have an account? <a href="/html/login.html">Login here</a></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/transitions.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

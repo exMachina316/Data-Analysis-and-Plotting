@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Dataset Analysis Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Protect this page - redirect to login if not authenticated
+        const user = localStorage.getItem('currentUser');
+        if (!user) {
+            sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+            window.location.href = '/html/login.html';
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <h1>Dataset Analysis Dashboard</h1>
+            <ul class="nav-links">
+                <li><a href="/html/index.html">Home</a></li>
+                <li><a href="#" onclick="logout(); return false;" style="color: #e53e3e; font-weight: 600;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="data">📊 Data Import</button>
+            <button class="tab-button" data-tab="visualization">📈 Visualization</button>
+            <button class="tab-button" data-tab="statistics">📉 Statistics</button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Data Import Tab -->
+        <div id="data-tab" class="tab-content active">
+        <section class="data-input-section">
+            <h2>Import Dataset</h2>
+            <form id="dataForm" class="data-form">
+                <fieldset>
+                    <legend>Data Source Configuration</legend>
+
+                    <label for="dataSource">Data Source Type:</label>
+                    <select id="dataSource" name="dataSource" required>
+                        <option value="">Select Data Source</option>
+                        <option value="csv">CSV File</option>
+                        <option value="json">JSON API</option>
+                        <option value="sample-sales">Sample: Sales Data</option>
+                        <option value="sample-population">Sample: Population Data</option>
+                        <option value="sample-healthcare">Sample: Healthcare Data</option>
+                    </select>
+
+                    <label for="dataInput">Data Input:</label>
+                    <textarea id="dataInput" name="dataInput" placeholder="Paste CSV data or JSON API URL here..."
+                        rows="6"></textarea>
+
+                    <div class="file-upload-wrapper">
+                        <label for="fileInput" class="file-upload-label">
+                            <span class="file-icon">📁</span>
+                            <span class="file-text">Or Upload a File</span>
+                            <span class="file-info">Click to browse or drag and drop</span>
+                        </label>
+                        <input type="file" id="fileInput" name="fileInput" accept=".csv,.json">
+                        <span id="fileName" class="file-name"></span>
+                    </div>
+
+                    <button type="submit">Load Dataset</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <section class="data-preview">
+            <h2>Data Preview</h2>
+            <article id="dataPreview" class="preview-container">
+                <p>Load a dataset from the Data Import tab to see the preview here.</p>
+            </article>
+        </section>
+        </div>
+
+        <!-- Visualization Tab -->
+        <div id="visualization-tab" class="tab-content">
+        <section class="data-preview">
+            <h2>Data Preview</h2>
+            <article id="dataPreview" class="preview-container">
+                <p>Load a dataset from the Data Import tab to see the preview here.</p>
+            </article>
+        </section>
+
+        <section class="visualization-section">
+            <h2>Data Visualization</h2>
+            <article class="chart-controls">
+                <label for="chartType">Chart Type:</label>
+                <select id="chartType">
+                    <option value="bar">Bar Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                    <option value="scatter">Scatter Plot</option>
+                </select>
+
+                <label for="xAxis">X-Axis:</label>
+                <select id="xAxis">
+                    <option value="">Select X-Axis</option>
+                </select>
+
+                <label for="yAxis">Y-Axis:</label>
+                <select id="yAxis">
+                    <option value="">Select Y-Axis</option>
+                </select>
+
+                <button id="generateChart">Generate Chart</button>
+            </article>
+
+            <article class="chart-container">
+                <canvas id="dataChart"></canvas>
+            </article>
+        </section>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div id="statistics-tab" class="tab-content">
+        <section class="stats-controls">
+            <h2>Statistical Analysis Tools</h2>
+            <form id="statsForm" class="stats-form">
+                <fieldset>
+                    <legend>Analysis Configuration</legend>
+
+                    <label for="statsColumn">Select Column for Analysis:</label>
+                    <select id="statsColumn" name="statsColumn" required>
+                        <option value="">Choose a column</option>
+                    </select>
+
+                    <label for="analysisType">Analysis Type:</label>
+                    <select id="analysisType" name="analysisType" required>
+                        <option value="descriptive">Descriptive Statistics</option>
+                        <option value="correlation">Correlation Analysis</option>
+                        <option value="distribution">Distribution Analysis</option>
+                        <option value="outliers">Outlier Detection</option>
+                    </select>
+
+                    <button type="submit">Run Analysis</button>
+                </fieldset>
+            </form>
+        </section>
+
+        <section class="stats-results">
+            <h2>Statistical Results</h2>
+            <article id="statsOutput" class="stats-container">
+                <p>Load a dataset and select analysis options above.</p>
+            </article>
+        </section>
+
+        <section class="advanced-stats">
+            <h2>Advanced Statistical Tools</h2>
+            <article class="stats-grid">
+                <section class="stat-card">
+                    <h3>Summary Statistics</h3>
+                    <span id="summaryStats" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Data Distribution</h3>
+                    <span id="distributionStats" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Correlation Matrix</h3>
+                    <span id="correlationMatrix" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+
+                <section class="stat-card">
+                    <h3>Outlier Analysis</h3>
+                    <span id="outlierAnalysis" class="stat-content">
+                        No data available
+                    </span>
+                </section>
+            </article>
+        </section>
+
+        <section class="stats-visualization">
+            <h2>Statistical Charts</h2>
+            <article class="chart-container">
+                <canvas id="statsChart"></canvas>
+            </article>
+        </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dataset Analysis Dashboard. Built with HTML, CSS, and JavaScript.</p>
+    </footer>
+
+    <script src="/js/transitions.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/statistics.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
