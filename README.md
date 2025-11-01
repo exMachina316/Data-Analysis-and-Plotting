@@ -1,40 +1,77 @@
-# Public Dataset Analysis Dashboard
+# DataDash - Public Dataset Analysis Dashboard
 
-A comprehensive web application for analyzing public datasets with interactive visualizations and statistical tools.
+A full-stack web application for analyzing and visualizing public datasets with user authentication and interactive statistical tools.
 
 ## Features
 
-### 🏠 Home Page (index.html)
+- **User Authentication**: Secure registration/login with bcrypt password hashing and token-based authentication
 - **Data Import**: Support for CSV files, JSON APIs, and sample datasets
-- **Data Preview**: Interactive table showing the first 10 rows of loaded data
-- **Visualization Tools**: Multiple chart types (Bar, Line, Pie, Scatter plots)
-- **Real-time Charts**: Dynamic chart generation using Chart.js
+- **Data Visualization**: Interactive charts (Bar, Line, Pie, Scatter) using Chart.js
+- **Statistical Analysis**: Descriptive statistics, correlation analysis, distribution metrics, and outlier detection
+- **User Management**: Profile management and account settings
 
-### 📊 Statistics Page (statistics.html)
-- **Descriptive Statistics**: Mean, median, mode, standard deviation, variance, skewness
-- **Correlation Analysis**: Correlation coefficients between numeric columns
-- **Distribution Analysis**: Histogram generation and distribution metrics
-- **Outlier Detection**: IQR-based outlier identification
-- **Advanced Stats Cards**: Summary statistics, correlation matrix, and outlier analysis
 
-## Technologies Used
+## Technologies
 
-- **HTML5**: Semantic markup with proper use of `<header>`, `<main>`, `<section>`, `<article>`, `<footer>`
-- **CSS3**: Modern styling with gradients, animations, and responsive design
-- **JavaScript (ES6+)**: Data processing, statistical calculations, and DOM manipulation
-- **Chart.js**: Interactive data visualization library
+**Backend**: Node.js, Express.js, bcrypt, Mongoose  
+**Frontend**: HTML5, CSS3, JavaScript (ES6+), Chart.js  
+**DevOps**: Docker, Docker Compose
 
-## Getting Started
+## Prerequisites
 
-1. **Clone or download** the project files to your local machine
-2. **Open** `index.html` in a modern web browser
-3. **Load a dataset** using one of these methods:
-   - Upload a CSV or JSON file
-   - Paste CSV data directly
-   - Enter a JSON API URL
-   - Use the sample dataset
+- Docker & Docker Compose (recommended) OR Node.js v18+
 
-## Data Import Options
+## Quick Start
+
+**With Docker (Recommended):**
+```bash
+docker-compose up -d
+# Access at http://localhost:3000
+docker-compose down  # To stop
+```
+
+**Without Docker:**
+```bash
+cd backend && npm install && npm start
+```
+
+## API Endpoints
+
+### Authentication
+- `POST /users` - Register a new user
+  ```json
+  {
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "securepassword"
+  }
+  ```
+- `POST /login` - Login and receive token
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "securepassword"
+  }
+  ```
+- `POST /logout` - Logout (invalidate token)
+
+### User Management (Requires Authentication)
+- `GET /users/:id` - Get user details
+- `PUT /users/:id` - Update user details
+- `DELETE /users/:id` - Delete user account
+
+### Health Check
+- `GET /api` - API health check
+
+## Usage
+
+1. Open `http://localhost:3000` and create an account
+2. Login with your credentials
+3. Import data (CSV/JSON file, API URL, or sample dataset)
+4. Generate visualizations by selecting chart type and columns
+5. Navigate to Statistics page for detailed analysis
+
+## Data Format Examples
 
 ### CSV Format
 ```csv
@@ -52,86 +89,27 @@ Bob,35,70000,Engineering
 ]
 ```
 
-### Sample Datasets
-The application includes built-in sample datasets for:
-- Sales data with monthly metrics
-- Population data for major cities
+## Development
 
-## File Structure
+**File Changes**: Frontend changes reflect immediately; backend requires restart  
+**Add Dependencies**: `docker exec -it datadash-app bash` then `npm install <package>`  
+**View Logs**: `docker logs -f datadash-app`
 
-```
-├── index.html          # Main dashboard page
-├── statistics.html     # Statistical analysis page
-├── styles.css          # Comprehensive styling
-├── script.js           # Main application logic
-├── statistics.js       # Statistical analysis functions
-└── README.md          # This file
-```
+## Configuration
 
-## Statistical Features
+Create `.env` file: `PORT=3000`, `NODE_ENV=development`, `SALT_ROUNDS=10`
 
-### Descriptive Statistics
-- Count, Mean, Median, Mode
-- Standard Deviation and Variance
-- Range, Quartiles (Q1, Q3)
-- Skewness calculation
+**Browser Support**: Chrome 60+, Firefox 55+, Safari 12+, Edge 79+
 
-### Advanced Analysis
-- **Correlation Analysis**: Pearson correlation coefficients
-- **Distribution Analysis**: Histogram generation and shape analysis
-- **Outlier Detection**: IQR method for identifying anomalous data points
+## Security Notes
 
-### Visualization Types
-- **Bar Charts**: For categorical data comparison
-- **Line Charts**: For trend analysis over time
-- **Pie Charts**: For proportional data representation
-- **Scatter Plots**: For correlation visualization
+⚠️ **Demo application** - For production: implement HTTPS, JWT verification, proper database, rate limiting, CSRF protection, input validation, and monitoring.
 
-## Browser Compatibility
+## Troubleshooting
 
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-## Usage Examples
-
-### Loading Sample Data
-1. Select "Sample Dataset" from the data source dropdown
-2. Click "Load Dataset"
-3. View the data preview and generate charts
-
-### Analyzing Your Data
-1. Upload your CSV/JSON file
-2. Navigate to the Statistics page
-3. Select a column for analysis
-4. Choose analysis type and run the analysis
-
-### Creating Visualizations
-1. After loading data, select chart type
-2. Choose X and Y axis columns
-3. Click "Generate Chart" to create visualization
-
-## Project Constraints Addressed
-
-✅ **Two Pages**: Home (data import & visualization) and Statistics (analysis tools)  
-✅ **Semantic HTML**: Uses `<header>`, `<main>`, `<section>`, `<article>`, `<footer>`, minimal `<div>` usage  
-✅ **Data Forms**: Comprehensive form for data import from various sources  
-✅ **Visualization Area**: Interactive charts with multiple types and customization  
-✅ **Statistical Tools**: Advanced statistical analysis including correlation, distribution, and outlier detection  
-✅ **No React**: Pure HTML, CSS, and JavaScript implementation
-
-## Future Enhancements
-
-- Export functionality for charts and statistics
-- More advanced statistical tests
-- Database connectivity
-- Real-time data streaming
-- Machine learning integration
-
-## Contributing
-
-This project was built as an educational example following web development best practices. Feel free to extend and modify as needed.
+- **Port in use**: `lsof -i :3000` or change port in `docker-compose.yml`
+- **Container won't start**: `docker-compose down -v && docker-compose up --build`
+- **Auth issues**: Clear browser cookies/localStorage
 
 ## License
 
