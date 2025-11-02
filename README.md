@@ -10,6 +10,15 @@ A full-stack web application for analyzing and visualizing public datasets with 
 - **Statistical Analysis**: Descriptive statistics, correlation analysis, distribution metrics, and outlier detection
 - **User Management**: Profile management and account settings
 
+## Demo
+
+Below is a short demo of the application. If you are viewing this repository on GitHub the video should play inline; otherwise you can download and play `frontend/res/demo.mp4`.
+
+<video controls width="720">
+  <source src="frontend/res/demo.mp4" type="video/mp4">
+  Your browser does not support the HTML5 Video element. You can
+  <a href="frontend/res/demo.mp4">download the demo video</a> instead.
+</video>
 
 ## Technologies
 
