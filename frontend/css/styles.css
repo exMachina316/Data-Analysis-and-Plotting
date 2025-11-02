@@ -131,10 +131,10 @@ header {
     margin: 0 auto;
 }
 
-.navbar h1 {
-    color: #4a5568;
+.logo {
     font-size: 1.8rem;
     font-weight: 700;
+    color: #667eea;
 }
 
 .nav-links {
